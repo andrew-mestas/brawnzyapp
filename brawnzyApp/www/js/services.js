@@ -49,5 +49,10 @@ angular.module('starter.services', ['ngResource'])
   };
 })
 .factory('WorkoutApi', function($resource, $http) {
-  return $resource('https://rocky-oasis-8496.herokuapp.com/api/workout/:id');
+  return $resource('https://rocky-oasis-8496.herokuapp.com/api/workout/:id', null, {
+    get: {
+      method: "GET",
+      isArray: true
+    }
+  });
 });
