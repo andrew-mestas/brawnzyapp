@@ -60,7 +60,13 @@ angular.module('starter', ['ionic',
       'tab-home': {
         templateUrl: 'templates/tab-home.html',
         controller: 'DashCtrl'
-      }
+      },
+      'workout_id':{
+        templateUrl: 'templates/workout_id.html',
+        controller: 'WorkoutIdCtrl'
+        }
+      })
+
     }
   })
 
@@ -73,6 +79,9 @@ angular.module('starter', ['ionic',
       }
     }
   })
+
+
+
 
   .state('tab.newworkout', {
     url: '/newworkout',

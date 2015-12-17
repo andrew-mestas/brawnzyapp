@@ -1,20 +1,54 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope, WorkoutApi) {
+.controller('WorkoutIdCtrl', function($scope) {
+
+})
+.controller('DashCtrl', function($scope, WorkoutApi,store, $http,$httpParamSerializerJQLike) {
     $scope.response = null;
 
-    WorkoutApi.get(function success(d) {
-      $scope.response = d;
-    }, function error(d) {
-      $scope.response = d;
-    });
+    // WorkoutApi.get(function success(d) {
+    //   $scope.response = d;
+    // }, function error(d) {
+    //   $scope.response = d;
+    // });
+$http({
+    method: "POST",
+    url: "https://rocky-oasis-8496.herokuapp.com/api/stats",
+    headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+              },
+    data: $httpParamSerializerJQLike({name: store.get('profile').name})
+    }).success(
+        function(responseData) {
+          $scope.response = responseData;
+          $scope.$broadcast('scroll.refreshComplete');
+
+        }
+    );
+$scope.doRefresh = function() {
+$http({
+    method: "POST",
+    url: "https://rocky-oasis-8496.herokuapp.com/api/stats",
+    headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+              },
+    data: $httpParamSerializerJQLike({name: store.get('profile').name})
+    }).success(
+        function(responseData) {
+          $scope.response = responseData;
+          $scope.$broadcast('scroll.refreshComplete');
+
+        }
+    );
+};
   
 })
 
-.controller('workoutFormCtrl', function($scope, $state, WorkoutApi, $http, $httpParamSerializerJQLike) {
+.controller('workoutFormCtrl', function($scope, $state, WorkoutApi, $http, $httpParamSerializerJQLike, store) {
 
   $scope.formData = { 'set_amount' : 0,
                       'day_index' : 0};
+  $scope.formData['personName'] = store.get('profile').name;
   $scope.message = "";
   $scope.data;
   $scope.response = null;
@@ -42,7 +76,7 @@ angular.module('starter.controllers', [])
      // $state.go('tab.home');
      if( 
        $scope.formData['set_amount'] && $scope.formData['day_index'] != undefined 
-       && $scope.formData['weekday'] && $scope.formData['weekly'] != undefined && $scope.formData['weight'] != undefined
+       && $scope.formData['weekday'] && $scope.formData['weight'] != undefined
 
       ){
      $scope.message = "sending..."
@@ -120,7 +154,7 @@ angular.module('starter.controllers', [])
     }).success(
         function(responseData) {
           store.set('response',responseData);
-          $state.go('tab.dash');
+          $state.go('tab.home');
         }
     );
 
