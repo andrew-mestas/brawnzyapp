@@ -38,19 +38,19 @@ angular.module('starter', ['ionic',
   $stateProvider
 
     // This is the state where you'll show the login
-    // .state('login', {
-    //   url: '/login',
-    //   templateUrl: 'templates/login.html',
-    //   controller: 'LoginCtrl',
-    // })
+    .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: 'LoginCtrl',
+    })
   // setup an abstract state for the tabs directive
     .state('tab', {
     url: '/tab',
     abstract: true,
-    templateUrl: 'templates/tabs.html'
-      //  data: {
-      //   requiresLogin: true
-      // }
+    templateUrl: 'templates/tabs.html',
+       data: {
+        requiresLogin: true
+      }
   })
 
 
@@ -132,12 +132,12 @@ angular.module('starter', ['ionic',
   $httpProvider.defaults.headers.put = {};
   $httpProvider.defaults.headers.patch = {};
 
-   // authProvider.init({
-   //    domain: 'brawnzy.auth0.com',
-   //    clientID: '',
-   //    callbackURL: location.href,
-   //    loginState: 'login'
-   //  }); 
+   authProvider.init({
+      domain: 'brawnzy.auth0.com',
+      clientID: 'Ts3mpUqCWWWHaA3ECrPubpQMxP4bGXrc',
+      callbackURL: location.href,
+      loginState: 'login'
+    }); 
 
     jwtInterceptorProvider.tokenGetter = function(store, jwtHelper, auth) {
     var idToken = store.get('token');

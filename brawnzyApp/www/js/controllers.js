@@ -114,7 +114,7 @@ angular.module('starter.controllers', [])
     enableFriends: true
   };
 })
-.controller('LoginCtrl', function($scope, auth, $state, store) {
+.controller('LoginCtrl', function($scope, auth, $state, store, $http, $httpParamSerializerJQLike) {
   auth.signin({
     authParams: {
       // This asks for the refresh token
@@ -131,6 +131,22 @@ angular.module('starter.controllers', [])
     store.set('profile', profile);
     store.set('token', token);
     store.set('refreshToken', refreshToken);
+
+
+    $http({
+    method: "POST",
+    url: "https://rocky-oasis-8496.herokuapp.com/api/users/create",
+    headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+              },
+    data: $httpParamSerializerJQLike(profile)
+    }).success(
+        function(responseData) {
+          store.set('response',responseData);
+          $state.go('tab.dash');
+        }
+    );
+
     $state.go('tab.dash');
   }, function(error) {
     // Oops something went wrong during login:
