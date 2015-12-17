@@ -1,0 +1,66 @@
+<ion-view view-title="Brawnzy">
+  <ion-content>
+  	 <form ng-submit="submit()" novalidate class="simple-form" >
+  	 		{{message}}
+	   <div class="list">
+	  	<label class="item item-input">
+		<span class="input-label">Date</span>
+		<input type="date" required ng-model="formData.weekday">
+		</label>
+	    <div class="list"></div>
+ 		<!-- {{weekday.getUTCDay()}} -->
+ 	 <li class="item item-toggle">
+	     Weekly?
+	     <label class="toggle toggle-assertive">
+	       <input type="checkbox" ng-model="formData.weekly">
+	       <div class="track">
+	         <div class="handle"></div>
+	       </div>
+	     </label>
+	  </li>	
+
+	  <label class="item item-input item-select">
+	    <div class="input-label">
+	      Workout Type
+	    </div>
+	   <select name="workout[workout_type]" required ng-model="formData.workout_type">
+	      <option>Custom</option>
+	      <option>Cardio</option>
+	      <option>Strength</option>
+	      <option>Upper Body</option>
+	      <option>Lower Body</option>
+	      <option>Core</option>
+   	   </select>
+		</div>
+	  <label class="item item-input">
+	    <span class="input-label">Workout Name</span>
+	    <input type="text" required ng-model="formData.name">
+	  </label>
+
+	<label class="item item-input">
+	  <span class="input-label">Set Amount</span>{{formData.set_amount}}
+	  <input type="tel">
+  	</label>
+	<div class="list">
+	  <div class="item range range-positive">
+	    <input type="range" name="volume" min="0" max="30" value="0" ng-model="formData.set_amount" required>
+	    <i class="icon ion-levels"></i>
+	  </div>
+	</div>
+  </div>
+
+   	<div ng-repeat="i in range(formData.set_amount) track by $index">
+   		<label class="item item-input">
+		  <span class="input-label">Weight: </span>
+		  <input type="number" required ng-model="formData.weight[i]">
+		</label>
+   	</div>
+   	<input ng-model="formData.day_index = formData.weekday.getUTCDay()" hidden />
+
+   	<button type="submit" class="button button-full button-positive">
+  		Save Workout
+	</button>
+
+	  </form>
+ </ion-content>
+</ion-view>
