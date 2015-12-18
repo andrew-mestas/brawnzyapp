@@ -1,4 +1,5 @@
 /* Empty. Add your own CSS if you like */
+@import url(https://fonts.googleapis.com/css?family=Kaushan+Script|Russo+One|Cinzel);
 .scroll {
 	height: 100%;
 }
@@ -22,10 +23,25 @@
 .tab-title{
 	color: #BA7115;
 }
-.tabs, .title, .scroll{
+.tabs, .scroll{
 	background-color: white !important;
 	border:none !important;
 	border-bottom: none;
 }
-.scroll{
+
+.title{
+	background:  #E88D1B !important;
+	border-bottom: none;
+	color: white !important;
+	font-family: 'Cinzel', serif;
+}	
+
+.button{
+	background:  #E88D1B !important;
+	border-top: none;
+	font-family: 'Cinzel', serif;
 }
+ h1, h2, h3, h4, p, input, span, div{
+	font-family: 'Cinzel', serif;
+
+ }

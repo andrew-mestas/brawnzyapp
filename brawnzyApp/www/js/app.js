@@ -69,7 +69,7 @@ angular.module('starter', ['ionic',
     views: {
       'tab-nearme': {
         templateUrl: 'templates/tab-nearme.html',
-        controller: 'DashCtrl'
+        controller: 'MapCtrl'
       }
     }
   })
@@ -94,7 +94,7 @@ angular.module('starter', ['ionic',
     views: {
       'tab-dash': {
         templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+        controller: 'StatsCtrl'
       }
     }
   })
@@ -129,7 +129,7 @@ angular.module('starter', ['ionic',
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/tab/home');
   $httpProvider.defaults.headers.common = {};
   $httpProvider.defaults.headers.post = {};
   $httpProvider.defaults.headers.put = {};

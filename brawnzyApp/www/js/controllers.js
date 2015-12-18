@@ -14,7 +14,11 @@ angular.module('starter.controllers', [])
   $scope.weekday = null;
   $scope.convertDate = function(date){
     return new Date(date).getMonth().toString() + "/"+ new Date(date).getDate().toString() + "/" + new Date(date).getUTCFullYear().toString()
-  }
+  };
+  $scope.del = function(item){
+    $scope.response.splice($scope.response.indexOf(item), 1);
+  };
+
 $http({
     method: "POST",
     url: "https://rocky-oasis-8496.herokuapp.com/api/stats",
@@ -119,7 +123,7 @@ $http({
         console.log(position)
         $http({
           method: "POST",
-          url: 'http://localhost:4040/api/gyms/nearme', 
+          url: 'https://rocky-oasis-8496.herokuapp.com/api/gyms/nearme', 
           headers: {
               'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
                 },
@@ -201,6 +205,52 @@ $http({
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
+
+.controller('StatsCtrl', function($scope,store,$http,$httpParamSerializerJQLike) {
+  $scope.time = function(seconds) {
+    if(typeof(seconds) != 'string')
+    {
+    var hours =  seconds / 3600;
+    var minutes = seconds / 60;
+    var seconds = seconds % 60;
+    return Math.floor(hours) + ":" + Math.floor(minutes) + ":" + Math.round(seconds);
+    } else return seconds;
+  }
+  var url = "https://rocky-oasis-8496.herokuapp.com/api/stats/" + store.get('profile').name;
+  $http({
+    method: "GET",
+    url: url,
+    headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+              }
+    }).success(
+        function(responseData) {
+          $scope.workout = responseData['workout'];
+          $scope.average = responseData['average'];
+          $scope.$broadcast('scroll.refreshComplete');
+
+        }
+    );
+
+    $scope.doRefresh = function() {
+  $http({
+    method: "GET",
+    url: url,
+    headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+              }
+    }).success(
+        function(responseData) {
+          $scope.workout = responseData['workout'];
+          $scope.average = responseData['average'];
+          $scope.$broadcast('scroll.refreshComplete');
+
+        }
+    );
+};
+  
+})
+
 
 .controller('AccountCtrl', function($scope) {
   $scope.settings = {

@@ -1,28 +1,17 @@
-<ion-view view-title="Your Stats">
+<ion-view view-title="Brawnzy">
   <ion-content class="padding">
-    <div class="list card">
-      <div class="item item-divider">Favorite Type</div>
-      <div class="item item-body">
-        <div>
-          There is a fire in <b>sector 3</b>
-        </div>
-      </div>
+  <ion-refresher
+    pulling-text="Pull to refresh..."
+    on-refresh="doRefresh()">
+  </ion-refresher>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right card" type="item-text-wrap" ng-repeat="w in workout track by $index" href="#">
+          <h2>{{w.name}}</h2>
+          <h3>Average Rest Time: {{time(average[$index])}}</h3>
+        </ion-item>
+      </ion-list>
     </div>
-    <div class="list card">
-      <div class="item item-divider">Avg Rest Time</div>
-      <div class="item item-body">
-        <div>
-          You ate an apple today!
-        </div>
-      </div>
-    </div>
-    <div class="list card">
-      <div class="item item-divider">Most Weight</div>
-      <div class="item item-body">
-        <div>
-          You have <b>29</b> meetings on your calendar tomorrow.
-        </div>
-      </div>
-    </div>
+
+  
   </ion-content>
 </ion-view>
