@@ -1,13 +1,15 @@
-<ion-view view-title="Home">
+<ion-view view-title="Brawnzy">
   <ion-content>
    <ion-refresher
     pulling-text="Pull to refresh..."
     on-refresh="doRefresh()">
   </ion-refresher>
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="response in response" type="item-text-wrap" href="#/tab/workout/{{response.id}}">
-        <h2>{{response.workout_type}}</h2>
-        <h3>{{response.name}}</h3>
+      <ion-item class="item-remove-animate item-avatar item-icon-right card" ng-repeat="response in response" type="item-text-wrap" href="#/tab/workout/{{response.id}}">
+        <h2>{{convertDate(response.weekday)}}</h2>
+        <h3>{{response.workout_type}}</h3>
+        <h4>{{response.name}}</h4>
+
         <p>Sets: {{response.set_amount}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
 

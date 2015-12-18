@@ -11,6 +11,10 @@ angular.module('starter.controllers', [])
     // }, function error(d) {
     //   $scope.response = d;
     // });
+  $scope.weekday = null;
+  $scope.convertDate = function(date){
+    return new Date(date).getMonth().toString() + "/"+ new Date(date).getDate().toString() + "/" + new Date(date).getUTCFullYear().toString()
+  }
 $http({
     method: "POST",
     url: "https://rocky-oasis-8496.herokuapp.com/api/stats",
@@ -21,6 +25,9 @@ $http({
     }).success(
         function(responseData) {
           $scope.response = responseData;
+          console.log(responseData)
+          // console.log(new Date(responseData.weekday))
+          // $scope.weekday = new Date(responseData.weekday).getUTCDay().toString() + "/" + new Date(responseData.weekday).getUTCFullYear().toString()
           $scope.$broadcast('scroll.refreshComplete');
 
         }
@@ -100,29 +107,81 @@ $http({
     }
   }
 })
-.controller('MapCtrl', function($scope, $ionicLoading) {
+.controller('MapCtrl', function($scope, $ionicLoading, $http, $httpParamSerializerJQLike) {
 
-  google.maps.event.addDomListener(window, 'load', function() {
-    var myLatlng = new google.maps.Latlng(37.3000, -120.4833);
+  $scope.loadMap = function(){
+     if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      }else {
+        console.log('Error');
+      }
+      function showPosition(position) {
+        console.log(position)
+        $http({
+          method: "POST",
+          url: 'http://localhost:4040/api/gyms/nearme', 
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+          data: $httpParamSerializerJQLike({lat: position.coords.latitude, lon: position.coords.longitude})
+        }).success(
+            function(data) {
+            console.log(data)
+            initMap(data, position.coords);
+          }
+        );
+      };
+
+  // google.maps.event.addDomListener(window, 'load', function() {
+
+    function initMap(markers,coords){
+    var myLatLng = {lat:coords.latitude, lng:coords.longitude};
 
     var mapOptions = {
-      center: myLatlng,
+      center: myLatLng,
       zoom: 16,
-      mayTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
-    var map = new google.maps.Map(document.getElementById('Map'), mapOptions);
+    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    var infoWindow = new google.maps.InfoWindow();
+
+      for(i = 0; i < markers.results.length; i++){
+      var latLon = {
+        lat: markers.results[i].geometry.location.lat,
+        lng: markers.results[i].geometry.location.lng
+      };
+      var marker = new google.maps.Marker({
+         map: map,
+         position: latLon,
+         title: "title"
+        });
+      var names = markers.results[i].name == undefined ? "Sorry no name here" : markers.results[i].name;
+      var ratings = markers.results[i].rating == undefined ? "No rating Available" :  markers.results[i].rating;
+      var hours = markers.results[i].opening_hours == undefined ? "No info Available" : markers.results[i].opening_hours.open_now;
+
+      (function(marker, name, rating, hours) {
+        google.maps.event.addListener(marker, "click", function (e) {
+          var open = "";
+          open = hours ? "We are open now" : "We are closed";
+        infoWindow.setContent("<div style = 'width:200px;min-height:40px'>" + name + "<br>" + rating + "<br>" + open + "</div>");
+            infoWindow.open(map, marker);
+      });
+    })(marker, names,ratings, hours);
+
 
     navigator.geolocation.getCurrentPosition(function(pos) {
-      map.setCenter(new google.maps.Latlng(pos.coords.latitude, pos.coords.longitude));
+      map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
       var myLocation = new google.maps.Marker({
-        position: new google.maps.Latlng(pos.coords.latitude, pos.coords.longitude),
+        position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
         map: map,
         title: 'My Location'
       });
     }); 
     $scope.map = map;
-  });
+  // });
+  }
+}};
 })
 .controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
